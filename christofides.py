@@ -5,7 +5,7 @@ from scipy.sparse import coo_matrix
 def getDistance(c1, c2):
   return int(round(math.sqrt(math.pow(c1[0] - c2[0], 2) + math.pow(c1[1] - c2[1], 2))))
 
-inputfile = 'tsp_example_2.txt' #sys.argv[1]
+inputfile = 'tsp_example_3.txt' #sys.argv[1]
 outputfile = inputfile + '.tour'
 
 f = open(inputfile, 'r')
@@ -14,7 +14,7 @@ input_arr = lines.split('\n');
 cities = []
 
 for item in input_arr[:-1]:
-  p = re.compile('\d+')
+  p = re.compile('(\d+)')
   temp = p.findall(item)
   city = {}
   city['id'] = int(temp[0])
@@ -30,9 +30,9 @@ odds = []
 euler_path = []
 hamilton = []
 for i, obj in enumerate(cities):
-  for j, obj in enumerate(cities):
+  for j, obj in enumerate(cities[i:]):
+    j+=i
     graph[i][j] = graph[j][i] = getDistance(cities[i]['coordinates'], cities[j]['coordinates'])
-
 
 # Minkey
 def minkey(key, visited):
