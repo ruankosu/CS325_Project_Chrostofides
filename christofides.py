@@ -1,11 +1,12 @@
 import sys, math, copy, heapq, re
+from scipy.sparse import coo_matrix
 
 # get distance
 def getDistance(c1, c2):
   return int(round(math.sqrt(math.pow(c1[0] - c2[0], 2) + math.pow(c1[1] - c2[1], 2))))
 
-inputfile = 'tsp_example_1.txt' #sys.argv[1]
-# outputfile = sys.argv[2]
+inputfile = 'tsp_example_2.txt' #sys.argv[1]
+outputfile = inputfile + '.tour'
 
 f = open(inputfile, 'r')
 lines = f.read()
@@ -20,8 +21,6 @@ for item in input_arr[:-1]:
   city['coordinates'] = [int(temp[1]), int(temp[2])]
   cities.append(city)
 
-print(cities)
-
 # Distrance matrix
 n = len(cities)
 w, h = n, n
@@ -34,12 +33,13 @@ for i, obj in enumerate(cities):
   for j, obj in enumerate(cities):
     graph[i][j] = graph[j][i] = getDistance(cities[i]['coordinates'], cities[j]['coordinates'])
 
+
 # Minkey
-def minkey(key, minSet):
+def minkey(key, visited):
   min = sys.maxsize;
   min_index = 0;
   for v, val in enumerate(key):
-    if (minSet[v] == False and key[v] < min):
+    if (visited[v] == False and key[v] < min):
       min = key[v];
       min_index = v;
   return min_index;
@@ -145,14 +145,29 @@ def hamilton():
     end_idx = len(euler_path)-1
 
   path_distance += graph[curr][next]
-  print(path_distance)
   return path_distance
 
 findMST()
 perfectMatching()
 euler(0)
 distance = hamilton()
-print(euler_path)
+
+f = open(outputfile, 'w+')
+f.write(str(distance)+'\n')
+
+for i in euler_path[0:len(euler_path)-1]:
+  f.write(str(i) + '\n')
+
+f.close()
+
+
+
+
+
+
+
+
+
 
 
 
